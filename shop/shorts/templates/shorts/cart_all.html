@@ -1,0 +1,32 @@
+{% load static %}
+{% block title %}
+    Your shopping cart
+{% endblock %}
+{% block content %}
+    <h1>Your shopping cart</h1>
+    <table class="cart">
+        <thead>
+        <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Remove</th>
+            <th>Unit price</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for elem in cart %}
+            {{ elem.product }}
+        {% endfor %}
+        <tr class="total">
+            <td>Total</td>
+            <td colspan="4"></td>
+            <td class="num">${{ cart.get_total_price }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <p class="text-right">
+        <a href="#" class="button">Checkout</a>
+    </p>
+{% endblock %}

@@ -1,0 +1,428 @@
+{% load static %}
+{% load divider %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'shorts/style.css' %}">
+    <script src="{% static 'shorts/image_changer.js' %}" defer></script>
+    <script src="{% static 'shorts/currency_window.js' %}" defer></script>
+    <script src="{% static 'shorts/modal.js' %}" defer></script>
+    <script src="{% static 'shorts/auth_form.js' %}" defer></script>
+    <link rel="shortcut icon" href="{% static 'shorts/images/icon.jpg' %}" />
+    <title>Sparkprint</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="content">
+            <header class="hat">
+                <div class="container">
+                    <div class="hat__upper">
+                        <a href="#" class="hat__currency">
+                            {% if currency == 'RUB' %}
+                                <img src="{% static '../static/shorts/images/russia.png' %}" alt="" class="hat__icon">
+                            {% elif currency == 'USD' %}    
+                                <img src="{% static '../static/shorts/images/usa.png' %}" alt="" class="hat__icon">
+                            {% else %}
+                                <img src="{% static '../static/shorts/images/china.png' %}" alt="" class="hat__icon">
+                            {% endif %}
+                            <span class="hat__class currency">{{ currency }}</span>
+                            <div class="hat__modal_currency" id="hat__modal">
+                                <div class="hat__header">
+                                    Выберите вылюту
+                                </div>
+                                <div class="hat__list">
+                                    <form action="{% url 'production' %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="hat__hidden" id="hat__hidden">
+                                        <button onclick="changeCurrency('RUB')" class="hat__value">
+                                            <img src="{% static '../static/shorts/images/russia.png' %}" alt="" class="hat__flag">
+                                            <span>Российский рубль</span>
+                                        </button>
+                                        <button onclick="changeCurrency('USD')" class="hat__value">
+                                            <img src="{% static '../static/shorts/images/usa.png' %}" alt="" class="hat__flag">
+                                            <span>Доллар США</span>
+                                        </button>
+                                        <button onclick="changeCurrency('CNY')" class="hat__value">
+                                            <img src="{% static '../static/shorts/images/china.png' %}" alt="" class="hat__flag">
+                                            <span>Китайский юань</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="#" class="hat__location" data-modal-target="#modal">
+                            <img src="{% static '../static/shorts/images/location.png' %}" alt="" class="hat__icon hat__icon_location">
+                            {% if city == 'Moskow' %}
+                                <span class="hat__class location">Москва</span>
+                            {% elif city != None %}
+                                <span class="hat__class location"><div id="min"></div></span> 
+                            {% endif %}
+                        </a>
+                        <div class="modal" id="modal">
+                            <div class="modal-header">
+                                <div class="title">Выберите ваш регион</div>
+                                <button data-close-button class="close-button">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <span class="modal-name">Список стран:</span>
+                                    <button onclick="changeModal()" id="modal-changer-russia" class="modal_russia modal-region">Россия</button>,
+                                    <button onclick="changeModal()" id="modal-changer-usa" class="modal_usa modal-region">США</button>,
+                                    <button onclick="changeModal()" id="modal-changer-china" class="modal_china modal-region">Китай</button>
+                                <br>
+                                <span class="modal-name">Список городов России:</span>
+                                <form action="{% url 'production' %}" method="POST">
+                                <div class="modal-box">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="modal-hidden" id="modal-hidden">
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Москва')" class="modal-link">Москва</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Самара')" class="modal-link">Самара</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Петербург')" class="modal-link">Санкт-Петербург</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Казань')" class="modal-link">Казань</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Новгород')" class="modal-link">Нижний Новгород</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Воронеж')" class="modal-link">Воронеж</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Калининград')" class="modal-link">Калининград</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Кемерово')" class="modal-link">Кемерово</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Краснодар')" class="modal-link">Краснодар</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Новосибирск')" class="modal-link">Новосибирск</button>
+                                    </div>
+                               </div>
+                            </form>
+                            </div>
+                        </div>
+                        <div class="modal_1" id="modal_1">
+                            <div class="modal-header">
+                                <div class="title">Выберите ваш регион</div>
+                                <button data-close-button1 class="close-button" id="cross_button1">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <span class="modal-name">Список стран:</span>
+                                    <button onclick="changeModal()" id="modal-changer-russia" class="modal_russia modal-region">Россия</button>,
+                                    <button onclick="changeModal()" id="modal-changer-usa" class="modal_usa modal-region">США</button>,
+                                    <button onclick="changeModal()" id="modal-changer-china" class="modal_china modal-region">Китай</button>
+                                <br>
+                               <span class="modal-name">Список городов США:</span>
+                               <form action="{% url 'production' %}" method="POST">
+                               <div class="modal-box">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="modal-hidden" id="modal-hidden">
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Нью-Йорк')" class="modal-link">Нью-Йорк</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Лос-Анджелес')" class="modal-link">Лос-Анджелес</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Чикаго')" class="modal-link">Чикаго</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Филадельфия')" class="modal-link">Филадельфия</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Маймами')" class="modal-link">Маймами</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Сиэтл')" class="modal-link">Сиэтл</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Хьюстон')" class="modal-link">Хьюстон</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Денвер')" class="modal-link">Денвер</button>
+                                    </div>
+                               </div>
+                            </form>
+                            </div>
+                        </div>
+                        <div class="modal_2" id="modal_2">
+                            <div class="modal-header">
+                                <div class="title">Выберите ваш регион</div>
+                                <button data-close-button1 class="close-button" id="cross_button2">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <span class="modal-name">Список стран:</span>
+                                    <button onclick="changeModal()" id="modal-changer-russia" class="modal_russia modal-region">Россия</button>,
+                                    <button onclick="changeModal()" id="modal-changer-usa" class="modal_usa modal-region">США</button>,
+                                    <button onclick="changeModal()" id="modal-changer-china" class="modal_china modal-region">Китай</button>
+                                <br>
+                               <span class="modal-name">Список городов Китая:</span>
+                               <form action="{% url 'production' %}" method="POST">
+                               <div class="modal-box">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="modal-hidden" id="modal-hidden">
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Пекин')" class="modal-link">Пекин</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Шанхай')" class="modal-link">Шанхай</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Чанчжоу')" class="modal-link">Чанчжоу</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Нанкин')" class="modal-link">Нанкин</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Исин')" class="modal-link">Исин</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Дэцин')" class="modal-link">Дэцин</button>
+                                    </div>
+                                    <div class="modal-element">
+                                        <button onclick="changeCity('Харбин')" class="modal-link">Харбин</button>
+                                    </div>
+                               </div>
+                            </form>
+                            </div>
+                        </div>
+                        <div id="overlay2"></div>
+
+                        <a href="{% url 'job' %}" class="hat__work">
+                            Работа в Sparkprint
+                        </a>
+                    </div>
+                    <div class="hat__lower">
+                        <div class="hat__logo">
+                            <div class="hat__name">
+                                <a href="{% url 'index' %}" class="hat__link">SPARKPRINT</a>
+                                <a href="{% url 'index' %}" class="hat__link_hidden">S&P</a>
+                            </div>
+                        </div>
+                        <div class="hat__search">
+                            <form action="{% url 'searched' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="search" placeholder="Поиск товаров" name="search_field" class="hat__field">
+                                <button type="submit" class="hat__button">
+                                    <img src="{% static '../static/shorts/images/find.png' %}" alt="" class="hat__find">
+                                </button>
+                            </form>
+                        </div>
+                        <div class="hat__tabs">
+                            {% if not request.user.is_authenticated %}
+                                <button id="modalBtn" class="hat__open"><img src="{% static '../static/shorts/images/user.png' %}" alt="" class="hat__tab hat__tab_user"></button>
+                            {% else %}
+                                <a href="{% url 'account' %}"><img src="{% static '../static/shorts/images/user.png' %}" alt="" class="hat__tab hat__tab_user"></a>
+                            {% endif %}
+                            <a href="{% url 'cart' %}"><img src="{% static '../static/shorts/images/cart.png' %}" alt="" class="hat__tab"></a>
+                            
+                            {% if modal == 'login' %}
+                                <div id="simpleModalSignup" class="popup activate">
+                            {% else %}
+                                <div id="simpleModalSignup" class="popup">
+                            {% endif %}
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div class="title">Вход в аккаунт</div>
+                                        <button type="button" data-close-button class="closeBtn">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="modal-block">
+                                            <form action="{% url 'login' %}" method="post" class="modal__form">
+                                                {% csrf_token %}
+                                                <div class="modal__field">
+                                                    <input
+                                                        type="text"
+                                                        name="email"
+                                                        class="modal__input"
+                                                        maxlength="150"
+                                                        id="email-input"
+                                                        placeholder='Введите email'
+                                                        required
+                                                    />
+                                                </div>
+                                                <div class="modal__field">
+                                                    <input
+                                                        type="password"
+                                                        name="password"
+                                                        class="modal__input"
+                                                        id="password-input-1"
+                                                        placeholder='Введите пароль'
+                                                        required
+                                                    />
+                                                    <a href="#" class="password-control" onclick="return showPassword(this, 1)"></a>
+                                                </div>
+                                                {% if form.non_field_errors %} {% for error in form.non_field_errors %}
+                                                    {{ error|escape }}
+                                                    {% endfor %} {% endif %}
+                                                <div class="modal__submit">
+                                                    <button type="submit" class="welcome__button">Войти</button>
+                                                    или
+                                                    <a href="#" class="welcome__register register">зарегистрироваться</a>
+                                                </div>    
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if modal == 'register' %}
+                                <div id="simpleModalRegister" class="popup activate">
+                            {% else %}
+                                <div id="simpleModalRegister" class="popup">
+                            {% endif %}
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <div class="title">Регистрация</div>
+                                            <button type="button" data-close-button class="closeBtn">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="modal-block">
+                                                <form action="{% url 'register' %}" method="POST" class="modal__form">
+                                                    {% csrf_token %} 
+                                                        {% for field in form %}
+                                                            
+                                                            {% if field.id_for_label == 'id_password1' %}
+                                                            <div class="modal__field">
+                                                                <input
+                                                                    type="password"
+                                                                    name="{{ field.html_name }}"
+                                                                    class="modal__input"
+                                                                    maxlength="{% if 'username' in field.label_tag %}150{% endif %}"
+                                                                    id="password-input-2"
+                                                                    placeholder='Введите пароль'
+
+                                                                    required
+                                                                />
+                                                                <a href="#" class="password-control" onclick="return showPassword(this, 2)"></a>
+                                                            </div>
+                                                            {% elif field.id_for_label == 'id_email' %}
+                                                            <div class="modal__field">
+                                                                <input
+                                                                    type="email"
+                                                                    name="{{ field.html_name }}"
+                                                                    class="modal__input"
+                                                                    maxlength="{% if 'username' in field.label_tag %}150{% endif %}"
+                                                                    id="{{ field.id_for_label }}"
+                                                                    placeholder='Введите email'
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            {% else %}
+                                                                <div class="modal__field">
+                                                                {% if field.id_for_label == 'id_captcha_1' %}
+                                                                    {{ field }}
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endif %}
+                                                        {% if field.errors %} {% for error in field.errors %}
+                                                            {{ error|escape }}
+                                                        {% endfor %} {% endif %} {% endfor %}
+                                                    <div class="modal__submit">
+                                                        <button type="submit" class="welcome__button register">Регистрация</button>
+                                                        или
+                                                        <a href="#" class="welcome__register signup">войти</a>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div id="overlay"></div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="page">
+                <div class="container">
+                    <div class="page__payment">Производство компании Sparkprint</div>
+                    <iframe src="https://www.youtube.com/embed/jbEgU2Tweoo" class="page__video" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <div class="page__flex">
+                        <div class="page__item">
+                            <div class="page__picture">
+                                <img src="{% static '../static/shorts/images/assurance.png' %}" alt="" class="page__image first_image">
+                            </div>
+                            <div class="page__information">
+                                <div class="page__notation">
+                                    Гарантия
+                                </div>
+                                <div class="page__sign">
+                                    Качественные экологичные материалы. Контроль каждого изделия
+                                </div>
+                            </div>
+                        </div>
+                        <div class="page__item">
+                            <div class="page__picture">
+                                <img src="{% static '../static/shorts/images/delivery.png' %}" alt="" class="page__image page__small">
+                            </div>
+                            <div class="page__information">
+                                <div class="page__notation">
+                                    Доставка
+                                </div>
+                                <div class="page__sign">
+                                    Быстрая доставка по России. Доставка по всему миру
+                                </div>
+                            </div>
+                        </div>
+                        <div class="page__item">
+                            <div class="page__picture">
+                                <img src="{% static '../static/shorts/images/service.png' %}" alt="" class="page__image page__small">
+                            </div>
+                            <div class="page__information">
+                                <div class="page__notation">
+                                    Сервис
+                                </div>
+                                <div class="page__sign">
+                                    Лёгкий процесс оплаты, обмена и возврата
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <footer class="foot">
+            <div class="container">
+                <div class="foot__line">
+                    <div class="foot__about">
+                        <span class="foot__main">Покупателям</span>
+                        <ul class="foot__list">
+                            <li><a href="{% url 'payment' %}" class="foot__link">Способы оплаты</a></li>
+                            <li><a href="{% url 'refund' %}" class="foot__link">Возврат товара</a></li>
+                        </ul>
+                    </div>
+                    <div class="foot__about">
+                        <span class="foot__main">Компания</span>
+                        <ul class="foot__list">
+                            <li><a href="{% url 'about' %}" class="foot__link">О нас</a></li>
+                            <li><a href="{% url 'contacts' %}" class="foot__link">Контакты</a></li>
+                            <li><a href="{% url 'production' %}" class="foot__link">Производство</a></li>
+                        </ul>
+                    </div>
+                    <div class="foot__about social">
+                        <span class="foot__main">Мы в соцсетях</span>
+                        <ul class="foot__list">
+                            <li><a href="https://vk.com/" class="foot__link">VK</a></li>
+                            <li><a href="https://facebook.com/" class="foot__link">Facebook</a></li>
+                            <li><a href="https://web.telegram.org/" class="foot__link">Telegram</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="foot__copyright">2004-2023 © Sparkprint — модный интернет-магазин одежды, обуви и аксессуаров. <br>Все права защищены.</div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
