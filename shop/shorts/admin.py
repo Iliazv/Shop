@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User, Short, Photo, Category, Size, Color, Comment, Order, OrderItem
+
 # vita
 
 admin.site.register(User, UserAdmin)
