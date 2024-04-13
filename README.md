@@ -8,9 +8,13 @@ Python, Django, HTML, CSS, JavaScript, Jquery, SQLite, Bootstrap.
 
 #### Требования: 
 Для запуска требуется создать виртуальное окружение
+
 python -m venv virtual-env
+
 И активировать окружение
+
 virtual-env\Scripts\activate
+
 Также требуется файл с зависимостями - requirements.txt:
 python
 django
